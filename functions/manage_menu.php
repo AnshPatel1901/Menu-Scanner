@@ -239,6 +239,7 @@ $result = $conn->query("SELECT * FROM menu");
                 </div>
             <?php endwhile; ?>
         </div>
+        <a href="/digidine/dashboard.php" class="btn btn-primary mb-4">← Back to Dashboard</a>
     </div>
 
     <!-- Bootstrap JS (for modals) -->

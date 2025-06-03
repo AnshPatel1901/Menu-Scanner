@@ -56,7 +56,21 @@
         .card-text {
             color: #cccccc;
         }
+        .custom-cart-btn {
+            background-color: #ff6600;
+            border: none;
+            border-radius: 30px;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
 
+        .custom-cart-btn:hover {
+            background-color: #e65500;
+            transform: scale(1.05);
+        }
         .btn-primary {
             background-color: #ff6600;
             border: none;
@@ -79,9 +93,6 @@
 
 <body>
     <div class="container">
-        <div class="text-right mb-4">
-            <a href="/digidine/pages/customer/cart.php" class="btn btn-warning">🛒 View Cart</a>
-        </div>
 
         <h2>Our Signature Menu</h2>
         <div class="row">
@@ -112,6 +123,10 @@
             ?>
 
         </div>
+    </div>
+
+    <div class="text-center mt-5">
+    <a href="/digidine/pages/customer/cart.php" class="btn btn-primary custom-cart-btn">🛒 View Cart</a>
     </div>
 </body>
 

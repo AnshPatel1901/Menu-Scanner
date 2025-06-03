@@ -102,9 +102,12 @@ $daily_analysis_result = $conn->query("SELECT DATE(created_at) as date, COUNT(*)
             border-radius: 30px;
             font-weight: bold;
             transition: transform 0.3s ease;
+            background-color: #ff6600;
+            border: none;
         }
         .btn-primary:hover, .btn-success:hover, .btn-info:hover, .btn-danger:hover {
             transform: translateY(-3px);
+            background-color: #e65500;
         }
         a.btn {
             margin-top: 20px;

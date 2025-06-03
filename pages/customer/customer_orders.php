@@ -78,6 +78,24 @@ $orders = $stmt->get_result();
             margin-bottom: 6px;
         }
 
+        .btn-orange {
+            background-color: #ff6600;
+            color: #fff !important;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: background 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
+            margin: 10px 5px;
+        }
+
+        .btn-orange:hover {
+            background-color: #e65500;
+            color: #fff !important;
+            text-decoration: none;
+        }
+
         .back-btn {
             text-align: center;
             margin-top: 30px;
@@ -155,9 +173,13 @@ $orders = $stmt->get_result();
     <?php else: ?>
         <div class="text-center mt-5">
             <p>You haven't placed any orders yet.</p>
-            <a href="menu.php" class="btn btn-orange">Order Now</a>
+            <a href="menu.php" class="btn-orange">Order Now</a>
         </div>
     <?php endif; ?>
+
+    <div class="text-center mt-4">
+    <a href="menu.php" class="btn-orange">➕ Continue Ordering</a>
+    </div>
 
     <div class="back-btn">
         <a href="/digidine/dashboard.php">🔙 Back to Dashboard</a>

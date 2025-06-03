@@ -151,10 +151,13 @@ $users = $conn->query("SELECT * FROM users");
             border-radius: 30px;
             font-weight: bold;
             transition: transform 0.3s ease;
+            background-color: #ff6600;
+            border: none;
         }
 
         .btn-primary:hover, .btn-success:hover, .btn-info:hover, .btn-danger:hover {
             transform: translateY(-3px);
+            background-color: #e65500;
         }
 
         .table {
@@ -190,8 +193,6 @@ $users = $conn->query("SELECT * FROM users");
 <body>
 <div class="container fade-in">
     <h1>Manage Users</h1>
-
-    <a href="/digidine/dashboard.php" class="btn btn-primary mb-4">← Back to Dashboard</a>
 
     <div class="card mb-5">
         <div class="card-header">
@@ -265,6 +266,8 @@ $users = $conn->query("SELECT * FROM users");
             </table>
         </div>
     </div>
+
+    <a href="/digidine/dashboard.php" class="btn btn-primary mb-4">← Back to Dashboard</a>
 
 </div>
 </body>
