@@ -1,4 +1,18 @@
-<!-- menu.php -->
+<?php
+ini_set('session.cookie_lifetime', 0); // Ensure session cookies expire when the browser is closed
+session_start();
+
+// Check if the user is logged in, if not then redirect to login page
+if (!isset($_SESSION["user_id"])) { // Assuming 'user_id' is set upon login
+    header("location: /digidine/auth/login.php");
+    exit;
+}
+
+// Prevent browser caching
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+?>
 <!DOCTYPE html>
 <html lang="en">
 

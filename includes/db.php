@@ -1,4 +1,5 @@
 <?php
+// Database connection details
 $host = 'localhost';
 $db = 'menu_scanner';
 $user = 'root';

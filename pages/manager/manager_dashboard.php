@@ -1,4 +1,5 @@
 <?php
+ini_set('session.cookie_lifetime', 0); // Ensure session cookies expire when the browser is closed
 session_start();
 include '../../includes/db.php';
 
@@ -7,6 +8,11 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'manager') {
     header("Location: ../../auth/login.php");
     exit();
 }
+
+// Prevent browser caching
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
 
 // Fetch orders based on status
 $pending_orders_query = "SELECT * FROM orders WHERE status='pending'";

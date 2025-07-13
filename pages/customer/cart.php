@@ -1,8 +1,20 @@
 <?php
+ini_set('session.cookie_lifetime', 0); // Ensure session cookies expire when the browser is closed
 session_start();
 require_once '../../includes/db.php';
 
-// ✅ Add to Cart Logic
+// Check if the user is logged in, if not then redirect to login page
+if (!isset($_SESSION["user_id"])) { // Assuming 'user_id' is set upon login
+    header("location: /digidine/auth/login.php");
+    exit;
+}
+
+// Prevent browser caching
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
+// Add to Cart Logic
 if (isset($_POST['add_to_cart'])) {
     $item_id = $_POST['item_id'];
     $item_name = $_POST['item_name'];
@@ -34,7 +46,7 @@ if (isset($_POST['add_to_cart'])) {
     exit();
 }
 
-// ✅ Remove item
+// Remove item from cart
 if (isset($_POST['remove_item'])) {
     $item_id = $_POST['item_id'];
     $_SESSION['cart'] = array_filter($_SESSION['cart'], function ($item) use ($item_id) {
@@ -44,23 +56,45 @@ if (isset($_POST['remove_item'])) {
     exit();
 }
 
-// ✅ Update item quantity
+// Update item quantity in cart
 if (isset($_POST['update_qty'])) {
     $item_id = $_POST['item_id'];
-    $new_qty = $_POST['item_qty'];
+    $new_qty = intval($_POST['item_qty']); // Ensure it's an integer
 
-    foreach ($_SESSION['cart'] as &$item) {
-        if ($item['id'] == $item_id) {
-            $item['qty'] = $new_qty;
+    if ($new_qty <= 0) { // If quantity is 0 or less, remove the item
+        $_SESSION['cart'] = array_filter($_SESSION['cart'], function ($cart_item_filter) use ($item_id) {
+            return $cart_item_filter['id'] != $item_id;
+        });
+    } else { // Otherwise, update the quantity
+        foreach ($_SESSION['cart'] as &$item_in_cart) {
+            if ($item_in_cart['id'] == $item_id) {
+                $item_in_cart['qty'] = $new_qty;
+                break;
+            }
         }
+        unset($item_in_cart);
     }
     header("Location: /digidine/pages/customer/cart.php");
     exit();
 }
 
-// ✅ Place Order Logic
-// ✅ Place Order Logic
+// Place Order Logic
 if (isset($_POST['place_order']) && !empty($_SESSION['cart'])) {
+    // Check for items with quantity 0 or less
+    $cart_has_invalid_item = false;
+    foreach ($_SESSION['cart'] as $cart_item_check_qty) {
+        if (intval($cart_item_check_qty['qty']) <= 0) {
+            $cart_has_invalid_item = true;
+            break;
+        }
+    }
+
+    if ($cart_has_invalid_item) {
+        $_SESSION['cart_error_message'] = "One or more items in your cart have an invalid quantity. Please update quantity to 1 or more, or remove the item.";
+        header("Location: /digidine/pages/customer/cart.php");
+        exit();
+    }
+
     if (!isset($_SESSION['username'])) {
         header("Location: ../../auth/login.php");
         exit();
@@ -198,6 +232,12 @@ if (isset($_POST['place_order']) && !empty($_SESSION['cart'])) {
 </head>
 <body>
 <div class="container mt-5">
+    <?php
+    if (isset($_SESSION['cart_error_message'])) {
+        echo "<div class='alert alert-danger text-center' role='alert'>" . htmlspecialchars($_SESSION['cart_error_message']) . "</div>";
+        unset($_SESSION['cart_error_message']); // Clear message after displaying
+    }
+    ?>
     <h2>🛒 Your Cart</h2>
 
     <?php if (!empty($_SESSION['cart'])): ?>
@@ -208,9 +248,9 @@ if (isset($_POST['place_order']) && !empty($_SESSION['cart'])) {
                 <p>Price: ₹<?php echo $item['price']; ?> | Quantity: <?php echo $item['qty']; ?></p>
                 <p><strong>Subtotal:</strong> ₹<?php echo $item['price'] * $item['qty']; ?></p>
 
-                <form method="post" action="/digidine/pages/customer/cart.php" class="d-inline-block">
+                <form method="post" action="/digidine/pages/customer/cart.php" class="d-inline-block" onsubmit="return confirmUpdateQuantity(this);">
                     <input type="hidden" name="item_id" value="<?php echo $item['id']; ?>">
-                    <input type="number" name="item_qty" value="<?php echo $item['qty']; ?>" min="1">
+                    <input type="number" name="item_qty" value="<?php echo $item['qty']; ?>" min="0" step="1">
                     <button type="submit" name="update_qty" class="btn btn-sm btn-orange">Update</button>
                 </form>
 
@@ -225,7 +265,7 @@ if (isset($_POST['place_order']) && !empty($_SESSION['cart'])) {
         <div class="total-box mt-4">
             <strong>Total: ₹<?php echo $total; ?></strong>
         </div>
-        <form method="post" action="/digidine/pages/customer/cart.php" class="text-center mt-4">
+        <form method="post" action="/digidine/pages/customer/cart.php" class="text-center mt-4" onsubmit="return validateBeforeOrder();">
             <input type="submit" name="place_order" class="btn btn-orange" value="🧾 Place Order">
         </form>
 
@@ -240,5 +280,86 @@ if (isset($_POST['place_order']) && !empty($_SESSION['cart'])) {
         </div>
     <?php endif; ?>
 </div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    let pendingForm = null;
+
+    // Called on form submit
+    window.confirmUpdateQuantity = function (form) {
+        const quantityInput = form.querySelector('input[name="item_qty"]');
+        const newQuantity = parseInt(quantityInput.value, 10);
+        const originalQuantity = parseInt(quantityInput.defaultValue, 10);
+
+        if (isNaN(newQuantity)) {
+            alert("Please enter a valid quantity.");
+            quantityInput.value = originalQuantity;
+            return false;
+        }
+
+        if (newQuantity === originalQuantity) {
+            return false; // No change
+        }
+
+        if (newQuantity === 0) {
+            pendingForm = form;
+            document.getElementById('confirmModal').style.display = 'flex';
+            return false; // Show modal instead of submitting
+        }
+
+        return true; // Normal submit for other quantities
+    };
+
+    // YES: Confirm removal
+    document.getElementById('confirmYes').addEventListener('click', function () {
+        if (pendingForm) {
+            document.getElementById('confirmModal').style.display = 'none';
+
+            // Inject hidden input to trigger update_qty PHP logic
+            const hidden = document.createElement('input');
+            hidden.type = 'hidden';
+            hidden.name = 'update_qty';
+            hidden.value = '1'; // Any value; just to pass `isset($_POST['update_qty'])`
+            pendingForm.appendChild(hidden);
+
+            pendingForm.submit();
+        }
+    });
+
+    // NO: Cancel removal
+    document.getElementById('confirmNo').addEventListener('click', function () {
+        if (pendingForm) {
+            const qtyInput = pendingForm.querySelector('input[name="item_qty"]');
+            qtyInput.value = qtyInput.defaultValue;
+            document.getElementById('confirmModal').style.display = 'none';
+            pendingForm = null;
+        }
+    });
+});
+
+function validateBeforeOrder() {
+    const qtyInputs = document.querySelectorAll('input[name="item_qty"]');
+    for (let input of qtyInputs) {
+        const qty = parseInt(input.value, 10);
+        if (isNaN(qty) || qty <= 0) {
+            alert("❌ One or more items have quantity 0. Please update or remove them before placing the order.");
+            return false;
+        }
+    }
+    return true;
+}
+</script>
+
+
+<!-- Custom Confirmation Modal -->
+<div id="confirmModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.7); z-index:9999; justify-content:center; align-items:center;">
+    <div style="background:#1e1e1e; padding:30px; border-radius:20px; max-width:400px; text-align:center; box-shadow:0 0 15px rgba(255,102,0,0.6);">
+        <p style="font-size:1.1rem; color:#fff;">⚠️ Do you really want to remove this item from your cart?</p>
+        <div style="margin-top:20px;">
+            <button id="confirmYes" class="btn btn-orange" style="margin-right:10px;">Yes, Remove</button>
+            <button id="confirmNo" class="btn btn-danger">Cancel</button>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

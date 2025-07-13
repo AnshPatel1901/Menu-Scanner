@@ -1,4 +1,5 @@
 <?php
+ini_set('session.cookie_lifetime', 0); // Ensure session cookies expire when the browser is closed
 session_start();
 
 if (!isset($_SESSION['username']) || $_SESSION['role'] != 'admin') {
@@ -174,7 +175,7 @@ $result = $conn->query("SELECT * FROM menu");
                     </div>
                     <div class="form-group">
                         <label>Price (₹):</label>
-                        <input type="number" class="form-control" name="price" required>
+                        <input type="number" class="form-control" name="price" step="0.01" min="0" required>
                     </div>
                     <div class="form-group">
                         <label>Image URL:</label>
@@ -225,7 +226,7 @@ $result = $conn->query("SELECT * FROM menu");
                                     </div>
                                     <div class="form-group">
                                         <label>Price (₹):</label>
-                                        <input type="number" class="form-control" name="price" value="<?php echo $row['price']; ?>" required>
+                                        <input type="number" class="form-control" name="price" value="<?php echo $row['price']; ?>" step="0.01" min="0" required>
                                     </div>
                                     <div class="form-group">
                                         <label>Image URL:</label>

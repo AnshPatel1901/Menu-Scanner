@@ -1,4 +1,5 @@
 <?php
+ini_set('session.cookie_lifetime', 0); // Ensure session cookies expire when the browser is closed
 session_start();
 require_once '../../includes/db.php';
 

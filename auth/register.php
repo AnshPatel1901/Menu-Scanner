@@ -1,5 +1,5 @@
 <?php
-session_start(); // Start the session to store messages
+session_start(); // Start session for storing messages
 
 include '../includes/db.php';
 
@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        // Set the error message in session
+        // Store error message in session
         $_SESSION['error_message'] = "Username already exists. Please choose a different one.";
     } else {
         // Hash the password
@@ -28,9 +28,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($stmt->execute()) {
             // Redirect to login page after successful registration
             header("Location: /digidine/auth/login.php");
-            exit(); // Prevent further execution of the code
+            exit(); // Stop script execution after redirect
         } else {
-            // Set the error message if there is an issue executing the query
+            // Store error message if database query fails
             $_SESSION['error_message'] = "Error: " . $stmt->error;
         }
     }

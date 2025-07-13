@@ -1,4 +1,5 @@
 <?php
+ini_set('session.cookie_lifetime', 0); // Ensure session cookies expire when the browser is closed
 session_start();
 require_once '../../includes/db.php';
 
@@ -6,6 +7,11 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'customer') {
     header("Location: ../../auth/login.php");
     exit();
 }
+
+// Prevent browser caching
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
 
 $user_id = $_SESSION['user_id'];
 
