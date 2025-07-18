@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($stmt->execute()) {
             // Redirect to login page after successful registration
-            header("Location: /digidine/auth/login.php");
+            header("Location: /Menu scanner/auth/login.php");
             exit(); // Stop script execution after redirect
         } else {
             // Store error message if database query fails
@@ -144,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <button type="submit" class="btn btn-dark btn-block">Register</button>
                     </form>
                     <div class="text-center mt-3">
-                        <p>Already have an account? <a href="/digidine/auth/login.php">Login here</a></p>
+                        <p>Already have an account? <a href="/Menu scanner/auth/login.php">Login here</a></p>
                     </div>
                 </div>
             </div>

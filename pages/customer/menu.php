@@ -4,7 +4,7 @@ session_start();
 
 // Check if the user is logged in, if not then redirect to login page
 if (!isset($_SESSION["user_id"])) { // Assuming 'user_id' is set upon login
-    header("location: /digidine/auth/login.php");
+    header("location: /Menu scanner/auth/login.php");
     exit;
 }
 
@@ -117,7 +117,7 @@ header("Pragma: no-cache");
                 echo "
     <div class='col-md-4'>
         <div class='card'>
-            <img src='/digidine/assets/images/" . basename($row['image']) . "' class='card-img-top' alt='{$row['name']}'>
+            <img src='/Menu scanner/assets/images/" . basename($row['image']) . "' class='card-img-top' alt='{$row['name']}'>
             <div class='card-body'>
                 <h5 class='card-title'>{$row['name']}</h5>
                 <p class='card-text'>{$row['description']}</p>
@@ -140,7 +140,7 @@ header("Pragma: no-cache");
     </div>
 
     <div class="text-center mt-5">
-    <a href="/digidine/pages/customer/cart.php" class="btn btn-primary custom-cart-btn">🛒 View Cart</a>
+    <a href="/Menu scanner/pages/customer/cart.php" class="btn btn-primary custom-cart-btn">🛒 View Cart</a>
     </div>
 </body>
 

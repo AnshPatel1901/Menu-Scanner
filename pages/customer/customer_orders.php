@@ -188,7 +188,7 @@ $orders = $stmt->get_result();
     </div>
 
     <div class="back-btn">
-        <a href="/digidine/dashboard.php">🔙 Back to Dashboard</a>
+        <a href="/Menu scanner/dashboard.php">🔙 Back to Dashboard</a>
     </div>
 </div>
 </body>

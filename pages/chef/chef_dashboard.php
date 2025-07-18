@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['order_id']) && isset(
     $stmt = $conn->prepare("UPDATE orders SET status=? WHERE id=?");
     $stmt->bind_param("si", $status, $order_id);
     if ($stmt->execute()) {
-        header("Location: /digidine/pages/chef/chef_dashboard.php");
+        header("Location: /Menu scanner/pages/chef/chef_dashboard.php");
         exit();
     } else {
         echo "<script>alert('Error updating order status');</script>";

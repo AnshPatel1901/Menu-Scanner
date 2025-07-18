@@ -5,7 +5,7 @@ require_once '../../includes/db.php';
 
 // Check if the user is logged in, if not then redirect to login page
 if (!isset($_SESSION["user_id"])) { // Assuming 'user_id' is set upon login
-    header("location: /digidine/auth/login.php");
+    header("location: /Menu scanner/auth/login.php");
     exit;
 }
 
@@ -42,7 +42,7 @@ if (isset($_POST['add_to_cart'])) {
     } else {
         $_SESSION['cart'][] = $cart_item;
     }
-    header("Location: /digidine/pages/customer/cart.php");
+    header("Location: /Menu scanner/pages/customer/cart.php");
     exit();
 }
 
@@ -52,7 +52,7 @@ if (isset($_POST['remove_item'])) {
     $_SESSION['cart'] = array_filter($_SESSION['cart'], function ($item) use ($item_id) {
         return $item['id'] != $item_id;
     });
-    header("Location: /digidine/pages/customer/cart.php");
+    header("Location: /Menu scanner/pages/customer/cart.php");
     exit();
 }
 
@@ -74,7 +74,7 @@ if (isset($_POST['update_qty'])) {
         }
         unset($item_in_cart);
     }
-    header("Location: /digidine/pages/customer/cart.php");
+    header("Location: /Menu scanner/pages/customer/cart.php");
     exit();
 }
 
@@ -91,7 +91,7 @@ if (isset($_POST['place_order']) && !empty($_SESSION['cart'])) {
 
     if ($cart_has_invalid_item) {
         $_SESSION['cart_error_message'] = "One or more items in your cart have an invalid quantity. Please update quantity to 1 or more, or remove the item.";
-        header("Location: /digidine/pages/customer/cart.php");
+        header("Location: /Menu scanner/pages/customer/cart.php");
         exit();
     }
 
@@ -132,7 +132,7 @@ if (isset($_POST['place_order']) && !empty($_SESSION['cart'])) {
         $_SESSION['cart'] = [];
 
         // Redirect to order confirmation page with success message
-        header("Location: /digidine/pages/customer/customer_orders.php?success=1");
+        header("Location: /Menu scanner/pages/customer/customer_orders.php?success=1");
         exit();
     } else {
         echo "<div class='text-danger text-center'>❌ Failed to place order.</div>";
@@ -248,13 +248,13 @@ if (isset($_POST['place_order']) && !empty($_SESSION['cart'])) {
                 <p>Price: ₹<?php echo $item['price']; ?> | Quantity: <?php echo $item['qty']; ?></p>
                 <p><strong>Subtotal:</strong> ₹<?php echo $item['price'] * $item['qty']; ?></p>
 
-                <form method="post" action="/digidine/pages/customer/cart.php" class="d-inline-block" onsubmit="return confirmUpdateQuantity(this);">
+                <form method="post" action="/Menu scanner/pages/customer/cart.php" class="d-inline-block" onsubmit="return confirmUpdateQuantity(this);">
                     <input type="hidden" name="item_id" value="<?php echo $item['id']; ?>">
                     <input type="number" name="item_qty" value="<?php echo $item['qty']; ?>" min="0" step="1">
                     <button type="submit" name="update_qty" class="btn btn-sm btn-orange">Update</button>
                 </form>
 
-                <form method="post" action="/digidine/pages/customer/cart.php" class="d-inline-block">
+                <form method="post" action="/Menu scanner/pages/customer/cart.php" class="d-inline-block">
                     <input type="hidden" name="item_id" value="<?php echo $item['id']; ?>">
                     <button type="submit" name="remove_item" class="btn btn-sm btn-danger">Remove</button>
                 </form>
@@ -265,18 +265,18 @@ if (isset($_POST['place_order']) && !empty($_SESSION['cart'])) {
         <div class="total-box mt-4">
             <strong>Total: ₹<?php echo $total; ?></strong>
         </div>
-        <form method="post" action="/digidine/pages/customer/cart.php" class="text-center mt-4" onsubmit="return validateBeforeOrder();">
+        <form method="post" action="/Menu scanner/pages/customer/cart.php" class="text-center mt-4" onsubmit="return validateBeforeOrder();">
             <input type="submit" name="place_order" class="btn btn-orange" value="🧾 Place Order">
         </form>
 
         <div class="back-btn">
-            <a href="/digidine/pages/customer/menu.php">🍽️ Continue Ordering</a>
+            <a href="/Menu scanner/pages/customer/menu.php">🍽️ Continue Ordering</a>
         </div>
 
     <?php else: ?>
         <div class="text-center mt-5">
             <p>Your cart is empty 😞</p>
-            <a href="/digidine/pages/customer/menu.php" class="btn btn-orange">Go to Menu</a>
+            <a href="/Menu scanner/pages/customer/menu.php" class="btn btn-orange">Go to Menu</a>
         </div>
     <?php endif; ?>
 </div>

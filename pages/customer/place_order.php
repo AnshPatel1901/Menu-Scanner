@@ -40,5 +40,5 @@ $delete_cart->bind_param("i", $user_id);
 $delete_cart->execute();
 
 // Redirect to orders page or dashboard
-header("Location: /digidine/pages/customer/customer_orders.php?success=1");
+header("Location: /Menu scanner/pages/customer/customer_orders.php?success=1");
 exit();
