@@ -135,10 +135,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="form-group">
                             <label for="role">Role:</label>
                             <select class="form-control" id="role" name="role">
+                                <option value="customer">Customer</option> <!-- Added customer role -->
                                 <option value="chef">Chef</option>
                                 <option value="manager">Manager</option>
                                 <option value="admin">Admin</option>
-                                <option value="customer">Customer</option> <!-- Added customer role -->
                             </select>
                         </div>
                         <button type="submit" class="btn btn-dark btn-block">Register</button>
