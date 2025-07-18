@@ -30,7 +30,7 @@ while ($row = $cart_result->fetch_assoc()) {
 
 // Insert into orders table
 $insert_order = $conn->prepare("INSERT INTO orders (customer_name, contact_number, total_price, status) VALUES (?, ?, ?, 'pending')");
-$contact = "N/A"; // You can collect contact in future if needed
+$contact = "N/A"; // can collect contact in future if needed
 $insert_order->bind_param("ssd", $username, $contact, $total_price);
 $insert_order->execute();
 

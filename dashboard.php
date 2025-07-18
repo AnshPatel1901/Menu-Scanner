@@ -28,7 +28,7 @@ switch ($userRole) {
         $dashboardContent = "Welcome Manager! You can view all orders and manage order status.";
         break;
     default:
-        $dashboardContent = "Welcome! You have access to basic features.";
+        $dashboardContent = "Welcome user! You have access to basic features.";
 }
 ?>
 

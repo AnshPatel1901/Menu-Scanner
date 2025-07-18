@@ -248,12 +248,14 @@ if (isset($_POST['place_order']) && !empty($_SESSION['cart'])) {
                 <p>Price: ₹<?php echo $item['price']; ?> | Quantity: <?php echo $item['qty']; ?></p>
                 <p><strong>Subtotal:</strong> ₹<?php echo $item['price'] * $item['qty']; ?></p>
 
+                // Update form
                 <form method="post" action="/Menu scanner/pages/customer/cart.php" class="d-inline-block" onsubmit="return confirmUpdateQuantity(this);">
                     <input type="hidden" name="item_id" value="<?php echo $item['id']; ?>">
                     <input type="number" name="item_qty" value="<?php echo $item['qty']; ?>" min="0" step="1">
                     <button type="submit" name="update_qty" class="btn btn-sm btn-orange">Update</button>
                 </form>
 
+                // remove form
                 <form method="post" action="/Menu scanner/pages/customer/cart.php" class="d-inline-block">
                     <input type="hidden" name="item_id" value="<?php echo $item['id']; ?>">
                     <button type="submit" name="remove_item" class="btn btn-sm btn-danger">Remove</button>
@@ -262,13 +264,17 @@ if (isset($_POST['place_order']) && !empty($_SESSION['cart'])) {
             <?php $total += $item['price'] * $item['qty']; ?>
         <?php endforeach; ?>
 
+        // total price
         <div class="total-box mt-4">
             <strong>Total: ₹<?php echo $total; ?></strong>
         </div>
+        
+        // place order button 
         <form method="post" action="/Menu scanner/pages/customer/cart.php" class="text-center mt-4" onsubmit="return validateBeforeOrder();">
             <input type="submit" name="place_order" class="btn btn-orange" value="🧾 Place Order">
         </form>
 
+        // continue order button
         <div class="back-btn">
             <a href="/Menu scanner/pages/customer/menu.php">🍽️ Continue Ordering</a>
         </div>
