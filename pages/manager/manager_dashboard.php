@@ -23,19 +23,19 @@ $pending_orders_result = $conn->query($pending_orders_query);
 $completed_orders_result = $conn->query($completed_orders_query);
 $in_progress_orders_result = $conn->query($in_progress_orders_query);
 
-// Handle adding a chef
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_chef'])) {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+// // Handle adding a chef
+// if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_chef'])) {
+//     $username = $_POST['username'];
+//     $password = $_POST['password'];
 
-    $stmt = $conn->prepare("INSERT INTO users (username, password, role) VALUES (?, ?, 'chef')");
-    $stmt->bind_param("ss", $username, $password);
-    if ($stmt->execute()) {
-        $message = "Chef added successfully!";
-    } else {
-        $message = "Error adding chef!";
-    }
-}
+//     $stmt = $conn->prepare("INSERT INTO users (username, password, role) VALUES (?, ?, 'chef')");
+//     $stmt->bind_param("ss", $username, $password);
+//     if ($stmt->execute()) {
+//         $message = "Chef added successfully!";
+//     } else {
+//         $message = "Error adding chef!";
+//     }
+// }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -281,7 +281,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_chef'])) {
         </div>
     </div>
 
-    <h2>Add a Chef</h2>
+    <!-- <h2>Add a Chef</h2>
     <hr style="border-top: 1px solid #555;">
     <form method="POST" action="manager_dashboard.php">
         <div class="form-group">
@@ -295,7 +295,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_chef'])) {
         <button type="submit" name="add_chef" class="btn btn-primary">Add Chef</button>
     </form>
     <br>
-    <br>
+    <br> -->
     <!-- Back Button -->
     <a href="../../dashboard.php" class="btn btn-primary">← Back to Dashboard</a>
 </div>
